@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>计量经济学全书</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    tags: 'ams',
+    macros: {
+      bm: ['{\\boldsymbol{#1}}', 1],
+      E: '{\\mathrm{E}}',
+      Var: '{\\mathrm{Var}}',
+      Cov: '{\\mathrm{Cov}}',
+      plim: '{\\operatorname{plim}}'
+    }
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #1a1d2e;
+    --card2: #141624;
+    --border: #2a2d3e;
+    --accent: #e07b39;
+    --accent2: #f59e4a;
+    --green: #4ade80;
+    --blue: #60a5fa;
+    --red: #f87171;
+    --purple: #c084fc;
+    --teal: #2dd4bf;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --code-bg: #0d1117;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.8;
+  }
+  .site-header {
+    background: linear-gradient(135deg, #0f1117 0%, #1e1510 50%, #0f1117 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 48px 24px 40px;
+    text-align: center;
+  }
+  .site-header h1 {
+    font-size: 2.6rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, #e07b39, #f59e4a, #fbbf24);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+  .site-header p { color: var(--muted); font-size: 1.05rem; }
+  .breadcrumb { margin-top: 16px; }
+  .breadcrumb a { color: var(--accent2); text-decoration: none; font-size: 0.9rem; }
+  .toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 32px auto;
+    max-width: 960px;
+  }
+  .toc h3 { color: var(--accent2); margin-bottom: 16px; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; }
+  .toc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 8px; }
+  .toc-item { padding: 8px 14px; border-radius: 6px; background: var(--card2); border: 1px solid var(--border); font-size: 0.9rem; }
+  .toc-item a { color: var(--text); text-decoration: none; }
+  .toc-item a:hover { color: var(--accent2); }
+  .toc-num { color: var(--muted); margin-right: 6px; }
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px 80px; }
+  .chapter { margin-bottom: 60px; }
+  .chapter-header {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 28px; padding-bottom: 16px;
+    border-bottom: 2px solid var(--border);
+  }
+  .chapter-num {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white; font-weight: 700; font-size: 0.85rem;
+    padding: 4px 12px; border-radius: 20px; white-space: nowrap;
+  }
+  .chapter-title { font-size: 1.6rem; font-weight: 700; }
+  .section { margin-bottom: 36px; }
+  .section-title {
+    font-size: 1.15rem; font-weight: 600; color: var(--accent2);
+    margin-bottom: 16px; padding-left: 12px;
+    border-left: 3px solid var(--accent2);
+  }
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px 24px; margin-bottom: 16px;
+  }
+  .card-title {
+    font-size: 0.9rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px;
+  }
+  .def .card-title { color: var(--green); }
+  .thm .card-title { color: var(--accent2); }
+  .proof .card-title { color: var(--purple); }
+  .note .card-title { color: var(--blue); }
+  .warn .card-title { color: var(--red); }
+  .assume .card-title { color: var(--teal); }
+  .stata .card-title { color: #a78bfa; }
+  .def   { border-left: 3px solid var(--green); }
+  .thm   { border-left: 3px solid var(--accent2); }
+  .proof { border-left: 3px solid var(--purple); background: #1e1a2e; }
+  .note  { border-left: 3px solid var(--blue); }
+  .warn  { border-left: 3px solid var(--red); }
+  .assume{ border-left: 3px solid var(--teal); background: #0f1e1e; }
+  .stata { border-left: 3px solid #a78bfa; background: #12101e; }
+  .formula-box {
+    background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 18px 20px; margin: 12px 0;
+    overflow-x: auto; font-size: 1.05rem;
+  }
+  code {
+    background: #1e2235; color: #a78bfa;
+    padding: 2px 8px; border-radius: 4px;
+    font-family: 'Consolas', 'Fira Code', monospace; font-size: 0.88rem;
+  }
+  pre {
+    background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 16px 20px; margin: 12px 0;
+    overflow-x: auto; font-family: 'Consolas', 'Fira Code', monospace;
+    font-size: 0.88rem; color: #a78bfa; line-height: 1.6;
+  }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.92rem; }
+  th { background: #1e2235; color: var(--accent2); padding: 10px 14px; text-align: left; border-bottom: 2px solid var(--border); }
+  td { padding: 9px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:hover td { background: #1a1d2e; }
+  .steps { counter-reset: step; }
+  .step { display: flex; gap: 14px; margin-bottom: 12px; align-items: flex-start; }
+  .step::before {
+    counter-increment: step; content: counter(step);
+    background: var(--accent); color: white; font-size: 0.8rem; font-weight: 700;
+    min-width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; margin-top: 3px;
+  }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
+  .hl  { color: var(--accent2); font-weight: 600; }
+  .hl-b{ color: var(--blue);    font-weight: 600; }
+  .hl-g{ color: var(--green);   font-weight: 600; }
+  .hl-r{ color: var(--red);     font-weight: 600; }
+  .hl-p{ color: var(--purple);  font-weight: 600; }
+  .hl-t{ color: var(--teal);    font-weight: 600; }
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  [id] { scroll-margin-top: 24px; }
+  .tag { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78rem; font-weight: 600; margin: 2px; }
+  .tag-gauss { background: #1a2a1a; color: var(--green); border: 1px solid #2d4a2d; }
+  .tag-robust { background: #1a1a2a; color: var(--blue); border: 1px solid #2a2d4a; }
+</style>
+</head>
+<body>
+
+<div class="site-header">
+  <h1>计量经济学全书</h1>
+  <p>从 OLS 推导到内生性识别 · 陈强体系 · 完整逻辑链</p>
+  <div class="breadcrumb"><a href="index.html">← 返回主页</a></div>
+</div>
+
+<div class="toc">
+  <h3>目录</h3>
+  <div class="toc-grid">
+    <div class="toc-item"><span class="toc-num">一</span><a href="#ch1">OLS 基础：一元线性回归</a></div>
+    <div class="toc-item"><span class="toc-num">二</span><a href="#ch2">多元线性回归：矩阵推导</a></div>
+    <div class="toc-item"><span class="toc-num">三</span><a href="#ch3">Gauss-Markov 定理与 OLS 性质</a></div>
+    <div class="toc-item"><span class="toc-num">四</span><a href="#ch4">假设检验与模型评价</a></div>
+    <div class="toc-item"><span class="toc-num">五</span><a href="#ch5">虚拟变量与交互项</a></div>
+    <div class="toc-item"><span class="toc-num">六</span><a href="#ch6">多重共线性</a></div>
+    <div class="toc-item"><span class="toc-num">七</span><a href="#ch7">异方差</a></div>
+    <div class="toc-item"><span class="toc-num">八</span><a href="#ch8">自相关</a></div>
+    <div class="toc-item"><span class="toc-num">九</span><a href="#ch9">内生性与工具变量</a></div>
+    <div class="toc-item"><span class="toc-num">十</span><a href="#ch10">模型设定与稳健性</a></div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 第一章 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="chapter" id="ch1">
+  <div class="chapter-header">
+    <span class="chapter-num">第一章</span>
+    <span class="chapter-title">OLS 基础：一元线性回归</span>
+  </div>
+
+  <div class="section">
+    <div class="section-title">1.1 模型设定与经济意义</div>
+    <div class="card def">
+      <div class="card-title">一元线性回归模型</div>
+      <div class="formula-box">$$y_i = \beta_1 + \beta_2 x_i + \varepsilon_i, \quad i = 1, 2, \ldots, n$$</div>
+      <p>其中 $y_i$ 为<span class="hl">被解释变量</span>（因变量），$x_i$ 为<span class="hl">解释变量</span>（自变量），$\varepsilon_i$ 为<span class="hl">随机扰动项</span>（误差项），包含一切未被 $x_i$ 捕捉的影响因素。</p>
+      <p>$\beta_2$ 是斜率：$x$ 每增加 1 个单位，$y$ 的条件期望变化 $\beta_2$ 个单位（<span class="hl">偏效应</span>）。</p>
+      <p>$\beta_1$ 是截距：$x=0$ 时 $y$ 的条件期望（通常无直接经济意义）。</p>
+    </div>
+    <div class="card note">
+      <div class="card-title">回归 vs. 相关</div>
+      <ul>
+        <li><span class="hl-b">相关</span>：度量两变量线性关系强弱，对称，$\text{Cor}(x,y) = \text{Cor}(y,x)$</li>
+        <li><span class="hl">回归</span>：用 $x$ 预测/解释 $y$，不对称，有方向，可用于因果推断（在额外假定下）</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">1.2 OLS 推导</div>
+    <div class="card thm">
+      <div class="card-title">最小二乘原则</div>
+      <p>OLS 选取 $(\hat{\beta}_1, \hat{\beta}_2)$ 最小化残差平方和：</p>
+      <div class="formula-box">$$\min_{\beta_1, \beta_2}\; Q(\beta_1, \beta_2) = \sum_{i=1}^{n}(y_i - \beta_1 - \beta_2 x_i)^2$$</div>
+      <p>对 $\beta_1, \beta_2$ 分别求偏导并令其为零（正规方程组）：</p>
+      <div class="formula-box">$$\frac{\partial Q}{\partial \beta_1} = -2\sum(y_i - \hat{\beta}_1 - \hat{\beta}_2 x_i) = 0 \implies \sum \hat{\varepsilon}_i = 0$$</div>
+      <div class="formula-box">$$\frac{\partial Q}{\partial \beta_2} = -2\sum x_i(y_i - \hat{\beta}_1 - \hat{\beta}_2 x_i) = 0 \implies \sum x_i \hat{\varepsilon}_i = 0$$</div>
+    </div>
+    <div class="card thm">
+      <div class="card-title">OLS 估计量的解析解</div>
+      <div class="formula-box">$$\hat{\beta}_2 = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^{n}(x_i - \bar{x})^2} = \frac{S_{xy}}{S_{xx}}$$</div>
+      <div class="formula-box">$$\hat{\beta}_1 = \bar{y} - \hat{\beta}_2 \bar{x}$$</div>
+      <p>其中 $S_{xx} = \sum(x_i-\bar{x})^2$，$S_{xy} = \sum(x_i-\bar{x})(y_i-\bar{y})$。</p>
+      <p>注意：$\hat{\beta}_2 = r_{xy} \cdot \dfrac{s_y}{s_x}$（相关系数乘以标准差之比）。</p>
+    </div>
+    <div class="card note">
+      <div class="card-title">OLS 残差的两个关键性质</div>
+      <p>由正规方程直接推出，无需任何假定：</p>
+      <ol>
+        <li>$\sum_{i=1}^{n} \hat{\varepsilon}_i = 0$（残差之和为零）</li>
+        <li>$\sum_{i=1}^{n} x_i \hat{\varepsilon}_i = 0$（残差与 $x$ 正交）</li>
+      </ol>
+      <p>推论：$\sum \hat{y}_i \hat{\varepsilon}_i = 0$，回归线必过 $(\bar{x}, \bar{y})$。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">1.3 平方和分解与 $R^2$</div>
+    <div class="card thm">
+      <div class="card-title">定理：$SS_T = SS_R + SS_E$</div>
+      <div class="formula-box">$$\underbrace{\sum(y_i - \bar{y})^2}_{SS_T} = \underbrace{\sum(\hat{y}_i - \bar{y})^2}_{SS_R \text{（回归）}} + \underbrace{\sum \hat{\varepsilon}_i^2}_{SS_E \text{（残差）}}$$</div>
+      <div class="formula-box">$$R^2 = \frac{SS_R}{SS_T} = 1 - \frac{SS_E}{SS_T} \in [0, 1]$$</div>
+      <p>$R^2$ 表示回归模型能解释的 $y$ 的变异比例。一元回归中 $R^2 = r_{xy}^2$。</p>
+    </div>
+    <div class="card warn">
+      <div class="card-title">$R^2$ 的局限性</div>
+      <ul>
+        <li>加入任意变量（哪怕不相关）都不会使 $R^2$ 下降，导致模型过度扩张。</li>
+        <li>调整 $R^2$（Adjusted $R^2$）惩罚参数个数：$\bar{R}^2 = 1 - \dfrac{SS_E/(n-k)}{SS_T/(n-1)}$，其中 $k$ 为参数个数（含截距）。</li>
+        <li>$R^2$ 高不代表因果关系，$R^2$ 低不代表模型没用。</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 第二章 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="chapter" id="ch2">
+  <div class="chapter-header">
+    <span class="chapter-num">第二章</span>
+    <span class="chapter-title">多元线性回归：矩阵推导</span>
+  </div>
+
+  <div class="section">
+    <div class="section-title">2.1 矩阵表示</div>
+    <div class="card def">
+      <div class="card-title">多元回归的矩阵形式</div>
+      <p>设有 $n$ 个观测、$K$ 个参数（含截距），令：</p>
+      <div class="formula-box">$$\bm{y} = \bm{X\beta} + \bm{\varepsilon}$$</div>
+      <p>其中：</p>
+      <div class="formula-box">$$\bm{y} = \begin{pmatrix}y_1\\\vdots\\y_n\end{pmatrix}_{n\times 1}, \quad \bm{X} = \begin{pmatrix}1 & x_{12} & \cdots & x_{1K}\\1 & x_{22} & \cdots & x_{2K}\\\vdots & \vdots & & \vdots\\1 & x_{n2} & \cdots & x_{nK}\end{pmatrix}_{n\times K}, \quad \bm{\beta} = \begin{pmatrix}\beta_1\\\vdots\\\beta_K\end{pmatrix}_{K\times 1}, \quad \bm{\varepsilon} = \begin{pmatrix}\varepsilon_1\\\vdots\\\varepsilon_n\end{pmatrix}_{n\times 1}$$</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">2.2 OLS 矩阵推导</div>
+    <div class="card thm">
+      <div class="card-title">定理：OLS 估计量的矩阵解</div>
+      <p>最小化 $\bm{\varepsilon}'\bm{\varepsilon} = (\bm{y} - \bm{X\beta})'(\bm{y} - \bm{X\beta})$，展开：</p>
+      <div class="formula-box">$$Q = \bm{y}'\bm{y} - 2\bm{\beta}'\bm{X}'\bm{y} + \bm{\beta}'\bm{X}'\bm{X\beta}$$</div>
+      <p>对 $\bm{\beta}$ 求导并令其为零（正规方程）：</p>
+      <div class="formula-box">$$\frac{\partial Q}{\partial \bm{\beta}} = -2\bm{X}'\bm{y} + 2\bm{X}'\bm{X}\hat{\bm{\beta}} = \bm{0}$$</div>
+      <p>当 $\bm{X}'\bm{X}$ 可逆（即不存在完全多重共线性）时：</p>
+      <div class="formula-box">$$\boxed{\hat{\bm{\beta}} = (\bm{X}'\bm{X})^{-1}\bm{X}'\bm{y}}$$</div>
+    </div>
+    <div class="card proof">
+      <div class="card-title">$\hat{\bm{\beta}}$ 的展开分析</div>
+      <p>将 $\bm{y} = \bm{X\beta} + \bm{\varepsilon}$ 代入：</p>
+      <div class="formula-box">$$\hat{\bm{\beta}} = (\bm{X}'\bm{X})^{-1}\bm{X}'(\bm{X\beta} + \bm{\varepsilon}) = \bm{\beta} + (\bm{X}'\bm{X})^{-1}\bm{X}'\bm{\varepsilon}$$</div>
+      <p>这个展开式是分析 OLS 偏误和方差的核心出发点。当 $E(\bm{\varepsilon}|\bm{X}) = \bm{0}$ 时，$E(\hat{\bm{\beta}}|\bm{X}) = \bm{\beta}$，即 OLS 无偏。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">2.3 投影矩阵</div>
+    <div class="card def">
+      <div class="card-title">定义：帽子矩阵（投影矩阵）</div>
+      <div class="formula-box">$$\bm{H} = \bm{X}(\bm{X}'\bm{X})^{-1}\bm{X}', \quad \bm{M} = \bm{I} - \bm{H}$$</div>
+      <p>则拟合值 $\hat{\bm{y}} = \bm{H}\bm{y}$，残差 $\hat{\bm{\varepsilon}} = \bm{M}\bm{y} = \bm{M\varepsilon}$。</p>
+      <p><span class="hl">$\bm{H}$ 的性质</span>：幂等（$\bm{H}^2 = \bm{H}$），对称，秩为 $K$；$\bm{M}$ 同样幂等对称，秩为 $n-K$。</p>
+      <p>几何意义：$\bm{H}$ 是向 $\bm{X}$ 列空间的投影算子；$\bm{M}$ 是向 $\bm{X}$ 列空间正交补的投影算子。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 第三章 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="chapter" id="ch3">
+  <div class="chapter-header">
+    <span class="chapter-num">第三章</span>
+    <span class="chapter-title">Gauss-Markov 定理与 OLS 性质</span>
+  </div>
+
+  <div class="section">
+    <div class="section-title">3.1 经典假定（CLM Assumptions）</div>
+    <div class="card assume">
+      <div class="card-title">CLM 假定（Classical Linear Model）</div>
+      <table>
+        <tr><th>编号</th><th>假定名称</th><th>数学表述</th></tr>
+        <tr><td><span class="hl-t">A1</span></td><td>线性性</td><td>$\bm{y} = \bm{X\beta} + \bm{\varepsilon}$，参数线性</td></tr>
+        <tr><td><span class="hl-t">A2</span></td><td>严格外生性</td><td>$E(\bm{\varepsilon}|\bm{X}) = \bm{0}$</td></tr>
+        <tr><td><span class="hl-t">A3</span></td><td>无完全共线</td><td>$\text{rank}(\bm{X}) = K$，$(\bm{X}'\bm{X})$ 可逆</td></tr>
+        <tr><td><span class="hl-t">A4</span></td><td>球形扰动项</td><td>$\text{Var}(\bm{\varepsilon}|\bm{X}) = \sigma^2 \bm{I}$（同方差 + 无自相关）</td></tr>
+        <tr><td><span class="hl-t">A5</span></td><td>正态性</td><td>$\bm{\varepsilon}|\bm{X} \sim N(\bm{0}, \sigma^2\bm{I})$</td></tr>
+      </table>
+      <p>A1–A4 是 Gauss-Markov 定理的假定；A5 附加后支持有限样本下的精确推断（$t, F$ 检验）。</p>
+    </div>
+    <div class="card note">
+      <div class="card-title">关于 A2：严格外生性的含义</div>
+      <p>$E(\varepsilon_i | x_1, \ldots, x_n) = 0$ 要求：扰动项与所有观测值无关，包括其他时期的 $x$。这比 $E(\varepsilon_i | x_i) = 0$（弱外生性）更强。</p>
+      <p>实践中更常用的版本：$E(\varepsilon_i | x_i) = 0$，即 $\text{Cov}(x_i, \varepsilon_i) = 0$。</p>
+      <p>违反外生性（$\text{Cov}(x_i, \varepsilon_i) \neq 0$）是<span class="hl-r">内生性问题</span>，导致 OLS 有偏且不一致。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">3.2 OLS 的无偏性与方差</div>
+    <div class="card thm">
+      <div class="card-title">定理：OLS 的无偏性（在 A1–A3 下）</div>
+      <div class="formula-box">$$E(\hat{\bm{\beta}} | \bm{X}) = \bm{\beta}$$</div>
+      <p><span class="hl">证明</span>：由 $\hat{\bm{\beta}} = \bm{\beta} + (\bm{X}'\bm{X})^{-1}\bm{X}'\bm{\varepsilon}$，取期望：</p>
+      <div class="formula-box">$$E(\hat{\bm{\beta}}|\bm{X}) = \bm{\beta} + (\bm{X}'\bm{X})^{-1}\bm{X}'\underbrace{E(\bm{\varepsilon}|\bm{X})}_{=\bm{0}} = \bm{\beta} \quad \square$$</div>
+    </div>
+    <div class="card thm">
+      <div class="card-title">定理：OLS 估计量的方差（在 A1–A4 下）</div>
+      <div class="formula-box">$$\text{Var}(\hat{\bm{\beta}}|\bm{X}) = \sigma^2(\bm{X}'\bm{X})^{-1}$$</div>
+      <p><span class="hl">证明</span>：$\hat{\bm{\beta}} - \bm{\beta} = (\bm{X}'\bm{X})^{-1}\bm{X}'\bm{\varepsilon}$，令 $\bm{A} = (\bm{X}'\bm{X})^{-1}\bm{X}'$：</p>
+      <div class="formula-box">$$\text{Var}(\hat{\bm{\beta}}|\bm{X}) = \bm{A}\,\text{Var}(\bm{\varepsilon}|\bm{X})\,\bm{A}' = \bm{A}\cdot\sigma^2\bm{I}\cdot\bm{A}' = \sigma^2\bm{A}\bm{A}' = \sigma^2(\bm{X}'\bm{X})^{-1} \quad \square$$</div>
+      <p>$\sigma^2$ 的无偏估计量：$\hat{\sigma}^2 = \dfrac{\hat{\bm{\varepsilon}}'\hat{\bm{\varepsilon}}}{n-K} = \dfrac{SS_E}{n-K}$（分母为自由度 $n-K$）。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">3.3 Gauss-Markov 定理</div>
+    <div class="card thm">
+      <div class="card-title">定理：Gauss-Markov（在 A1–A4 下）</div>
+      <p>在所有<span class="hl">线性无偏估计量</span>（BLUE）中，OLS 估计量具有<span class="hl">最小方差</span>：</p>
+      <div class="formula-box">$$\text{Var}(\tilde{\beta}_k) \geq \text{Var}(\hat{\beta}_k^{\text{OLS}}), \quad \forall k$$</div>
+      <p>对任何线性无偏估计量 $\tilde{\bm{\beta}} = \bm{Cy}$（$E(\tilde{\bm{\beta}}) = \bm{\beta}$）均成立。</p>
+      <p><span class="hl">BLUE = Best Linear Unbiased Estimator（最优线性无偏估计量）</span></p>
+    </div>
+    <div class="card proof">
+      <div class="card-title">证明思路</div>
+      <p>令 $\bm{D} = \bm{C} - (\bm{X}'\bm{X})^{-1}\bm{X}'$，由无偏性推出 $\bm{DX} = \bm{0}$。</p>
+      <p>则 $\text{Var}(\tilde{\bm{\beta}}|\bm{X}) = \sigma^2(\bm{D}\bm{D}' + (\bm{X}'\bm{X})^{-1})$。</p>
+      <p>因为 $\bm{DD}'$ 是半正定矩阵，故 $\text{Var}(\tilde{\bm{\beta}}) \geq \text{Var}(\hat{\bm{\beta}}^{\text{OLS}})$（矩阵半正定意义）。$\square$</p>
+    </div>
+    <div class="card warn">
+      <div class="card-title">Gauss-Markov 的边界</div>
+      <p>GM 定理只说 OLS 在<span class="hl">线性无偏</span>类中最优。如果：</p>
+      <ul>
+        <li>允许有偏（如岭回归）：可以牺牲无偏换取更小总 MSE</li>
+        <li>非线性估计量：理论上可超越 OLS</li>
+        <li>A4 违反（异方差/自相关）：WLS/GLS 在线性无偏类中优于 OLS</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 第四章 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="chapter" id="ch4">
+  <div class="chapter-header">
+    <span class="chapter-num">第四章</span>
+    <span class="chapter-title">假设检验与模型评价</span>
+  </div>
+
+  <div class="section">
+    <div class="section-title">4.1 单个系数的 $t$ 检验</div>
+    <div class="card thm">
+      <div class="card-title">$t$ 检验（在 A1–A5 下）</div>
+      <p>$H_0: \beta_k = \beta_k^0$，检验统计量：</p>
+      <div class="formula-box">$$t = \frac{\hat{\beta}_k - \beta_k^0}{\hat{\text{se}}(\hat{\beta}_k)} \sim t(n-K)$$</div>
+      <p>其中标准误 $\hat{\text{se}}(\hat{\beta}_k) = \hat{\sigma}\sqrt{[(\bm{X}'\bm{X})^{-1}]_{kk}}$。</p>
+      <p>最常用：$H_0: \beta_k = 0$（解释变量 $k$ 对 $y$ 无影响），$t = \hat{\beta}_k / \hat{\text{se}}(\hat{\beta}_k)$。</p>
+    </div>
+    <div class="card note">
+      <div class="card-title">置信区间与 $t$ 检验的对偶性</div>
+      <p>$\beta_k$ 的 $(1-\alpha)$ 置信区间：$\hat{\beta}_k \pm t_{\alpha/2}(n-K)\cdot\hat{\text{se}}(\hat{\beta}_k)$</p>
+      <p>若置信区间不含 0，则在水平 $\alpha$ 下拒绝 $H_0: \beta_k = 0$。两者完全等价。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">4.2 联合显著性：$F$ 检验</div>
+    <div class="card thm">
+      <div class="card-title">$F$ 检验（整体显著性）</div>
+      <p>$H_0: \beta_2 = \beta_3 = \cdots = \beta_K = 0$（所有斜率系数均为零）：</p>
+      <div class="formula-box">$$F = \frac{SS_R / (K-1)}{SS_E / (n-K)} = \frac{R^2/(K-1)}{(1-R^2)/(n-K)} \sim F(K-1, n-K)$$</div>
+      <p>若 $F > F_\alpha(K-1, n-K)$，拒绝 $H_0$，认为模型整体显著。</p>
+    </div>
+    <div class="card thm">
+      <div class="card-title">线性约束的 $F$ 检验（一般形式）</div>
+      <p>检验 $J$ 个线性约束 $H_0: \bm{R\beta} = \bm{r}$，比较受约束模型（R）与无约束模型（U）：</p>
+      <div class="formula-box">$$F = \frac{(SS_E^R - SS_E^U)/J}{SS_E^U/(n-K)} = \frac{(R_U^2 - R_R^2)/J}{(1-R_U^2)/(n-K)} \sim F(J, n-K)$$</div>
+      <p>约束越"贵"（加约束后 $SS_E$ 增加越多），$F$ 越大，越倾向拒绝 $H_0$。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">4.3 信息准则</div>
+    <div class="card def">
+      <div class="card-title">AIC 与 BIC</div>
+      <div class="formula-box">$$\text{AIC} = -2\ln L + 2K, \qquad \text{BIC} = -2\ln L + K\ln n$$</div>
+      <p>值越小越好。BIC 对参数个数的惩罚更重（当 $n > 7$ 时 $\ln n > 2$），倾向选择更简约的模型。用于非嵌套模型比较。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 第五章 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="chapter" id="ch5">
+  <div class="chapter-header">
+    <span class="chapter-num">第五章</span>
+    <span class="chapter-title">虚拟变量与交互项</span>
+  </div>
+
+  <div class="section">
+    <div class="section-title">5.1 虚拟变量</div>
+    <div class="card def">
+      <div class="card-title">虚拟变量的设置</div>
+      <p>对具有 $m$ 个类别的定性变量，只引入 $m-1$ 个虚拟变量（<span class="hl">避免虚拟变量陷阱</span>：完全共线性）。</p>
+      <p>模型：$y_i = \beta_1 + \beta_2 D_i + \beta_3 x_i + \varepsilon_i$，其中 $D_i \in \{0,1\}$。</p>
+      <p>$\beta_2$ 的含义：在 $x_i$ 相同条件下，$D=1$ 组相对于基准组（$D=0$）的<span class="hl">均值差异</span>。</p>
+    </div>
+    <div class="card note">
+      <div class="card-title">虚拟变量陷阱</div>
+      <p>若模型含截距，且引入所有 $m$ 个虚拟变量，则 $D_1 + D_2 + \cdots + D_m = \bm{1}$（截距列），$\bm{X}$ 不满秩，$(\bm{X}'\bm{X})$ 不可逆。</p>
+      <p>解决：删去一个类别作为<span class="hl">基准组</span>（参照组），其余系数解释为相对于基准组的差异。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">5.2 交互项与异质效应</div>
+    <div class="card def">
+      <div class="card-title">交互项的设置与解释</div>
+      <p>模型：$y_i = \beta_1 + \beta_2 x_i + \beta_3 D_i + \beta_4 (x_i \cdot D_i) + \varepsilon_i$</p>
+      <p>偏效应：$\dfrac{\partial E(y|x, D)}{\partial x} = \beta_2 + \beta_4 D_i$</p>
+      <ul>
+        <li>$D=0$ 时，$x$ 的效应为 $\beta_2$</li>
+        <li>$D=1$ 时，$x$ 的效应为 $\beta_2 + \beta_4$</li>
+        <li>$\beta_4$：两组之间效应的<span class="hl">差异</span>（效应异质性）</li>
+      </ul>
+    </div>
+    <div class="card note">
+      <div class="card-title">对数形式的解释</div>
+      <table>
+        <tr><th>模型形式</th><th>$\beta_2$ 的含义</th></tr>
+        <tr><td>$y = \beta_1 + \beta_2 x$（线性-线性）</td><td>$x$ 增加 1，$y$ 增加 $\beta_2$（绝对效应）</td></tr>
+        <tr><td>$\ln y = \beta_1 + \beta_2 x$（对数-线性）</td><td>$x$ 增加 1，$y$ 增加约 $100\beta_2\%$</td></tr>
+        <tr><td>$y = \beta_1 + \beta_2 \ln x$（线性-对数）</td><td>$x$ 增加 $1\%$，$y$ 增加 $\beta_2/100$</td></tr>
+        <tr><td>$\ln y = \beta_1 + \beta_2 \ln x$（双对数）</td><td>$x$ 增加 $1\%$，$y$ 增加约 $\beta_2\%$（弹性）</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 第六章 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="chapter" id="ch6">
+  <div class="chapter-header">
+    <span class="chapter-num">第六章</span>
+    <span class="chapter-title">多重共线性</span>
+  </div>
+
+  <div class="section">
+    <div class="section-title">6.1 什么是多重共线性</div>
+    <div class="card def">
+      <div class="card-title">定义</div>
+      <p><span class="hl">完全共线性</span>：$\bm{X}$ 的某列是其他列的精确线性组合，$\text{rank}(\bm{X}) < K$，$(\bm{X}'\bm{X})$ 奇异，OLS 无解。</p>
+      <p><span class="hl">近似共线性</span>（更常见）：解释变量之间高度相关，但 $(\bm{X}'\bm{X})$ 仍可逆。OLS 可以估计，但结果不稳定。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">6.2 后果与诊断</div>
+    <div class="card thm">
+      <div class="card-title">多重共线性的后果</div>
+      <p>OLS 仍然无偏（GM 定理不受影响），但：</p>
+      <ul>
+        <li>$\text{Var}(\hat{\beta}_k) = \sigma^2 \cdot \dfrac{1}{S_{kk}(1-R_k^2)}$ 膨胀，$t$ 统计量偏小</li>
+        <li>系数估计量对数据变化极度敏感，加减一个样本或变量可能使结果大幅改变</li>
+        <li>系数符号可能"错误"（与理论相反）</li>
+      </ul>
+      <p>其中 $R_k^2$ 是第 $k$ 个解释变量对其他解释变量回归的 $R^2$。</p>
+    </div>
+    <div class="card def">
+      <div class="card-title">诊断指标：方差膨胀因子（VIF）</div>
+      <div class="formula-box">$$\text{VIF}_k = \frac{1}{1 - R_k^2}$$</div>
+      <p>经验判断：$\text{VIF}_k > 10$ 通常认为存在严重多重共线性（部分文献用 $>5$）。</p>
+      <p>Stata 命令：回归后输入 <code>vif</code>。</p>
+    </div>
+    <div class="card note">
+      <div class="card-title">处理方法</div>
+      <ol>
+        <li>增加样本量（降低方差）</li>
+        <li>删去高度相关的变量（但可能引入遗漏变量偏误，需权衡）</li>
+        <li>利用先验信息约束系数（岭回归）</li>
+        <li>改用主成分回归（PCA）</li>
+        <li>若目的是预测而非推断，多重共线性影响较小</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 第七章 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="chapter" id="ch7">
+  <div class="chapter-header">
+    <span class="chapter-num">第七章</span>
+    <span class="chapter-title">异方差</span>
+  </div>
+
+  <div class="section">
+    <div class="section-title">7.1 异方差的定义与后果</div>
+    <div class="card def">
+      <div class="card-title">定义：异方差</div>
+      <p>违反 A4 的同方差假定：$\text{Var}(\varepsilon_i | x_i) = \sigma_i^2$，各观测的扰动项方差不同。</p>
+    </div>
+    <div class="card thm">
+      <div class="card-title">异方差的后果</div>
+      <ul>
+        <li><span class="hl-g">OLS 仍然无偏</span>：A2 未违反，$E(\hat{\bm{\beta}}) = \bm{\beta}$ 仍成立</li>
+        <li><span class="hl-r">OLS 不再是 BLUE</span>：A4 违反，GM 定理不适用，WLS 更有效</li>
+        <li><span class="hl-r">OLS 标准误误导性</span>：若使用普通标准误，$t$ 和 $F$ 统计量失效，推断不可靠</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">7.2 检验异方差</div>
+    <div class="card thm">
+      <div class="card-title">White 检验</div>
+      <p>辅助回归：将 $\hat{\varepsilon}_i^2$ 对 $x_i$、$x_i^2$ 及 $x_i x_j$ 回归，$H_0$：无异方差。</p>
+      <div class="formula-box">$$LM = nR^2 \xrightarrow{d} \chi^2(q) \quad \text{（} H_0 \text{ 成立时）}$$</div>
+      <p>其中 $q$ 为辅助回归中解释变量个数（不含截距）。Stata：<code>estat imtest, white</code></p>
+    </div>
+    <div class="card thm">
+      <div class="card-title">Breusch-Pagan (BP) 检验</div>
+      <p>辅助回归：将 $\hat{\varepsilon}_i^2 / \hat{\sigma}^2$ 对 $x_i$ 回归（假设方差是 $x_i$ 的线性函数）：</p>
+      <div class="formula-box">$$LM = \frac{SS_R^*}{2} \xrightarrow{d} \chi^2(K-1)$$</div>
+      <p>Stata：<code>estat hettest</code>（BP 检验），<code>estat imtest, white</code>（White 检验）</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">7.3 修正异方差</div>
+    <div class="card thm">
+      <div class="card-title">方法一：White 稳健标准误</div>
+      <p>不改变 OLS 点估计，仅修正协方差矩阵估计：</p>
+      <div class="formula-box">$$\widehat{\text{Var}}(\hat{\bm{\beta}})_{\text{robust}} = (\bm{X}'\bm{X})^{-1}\left(\sum_{i=1}^{n}\hat{\varepsilon}_i^2 \bm{x}_i\bm{x}_i'\right)(\bm{X}'\bm{X})^{-1}$$</div>
+      <p>Stata：在 <code>regress</code> 后加 <code>, robust</code> 选项。<span class="tag tag-robust">robust</span></p>
+      <p>优点：无需知道异方差的具体形式，渐近有效。缺点：小样本表现有时不佳。</p>
+    </div>
+    <div class="card thm">
+      <div class="card-title">方法二：加权最小二乘（WLS）</div>
+      <p>若 $\text{Var}(\varepsilon_i) = \sigma^2 / w_i$（权重 $w_i$ 已知或可估计），以 $\sqrt{w_i}$ 为权重变换模型：</p>
+      <div class="formula-box">$$\sqrt{w_i}\,y_i = \sqrt{w_i}\,\beta_1 + \sum_k \sqrt{w_i}\,\beta_k x_{ki} + \sqrt{w_i}\,\varepsilon_i$$</div>
+      <p>变换后的扰动项 $\sqrt{w_i}\,\varepsilon_i$ 满足同方差，对变换后的模型做 OLS 即为 WLS。</p>
+      <p>Stata：<code>regress y x1 x2 [aweight = w]</code></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 第八章 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="chapter" id="ch8">
+  <div class="chapter-header">
+    <span class="chapter-num">第八章</span>
+    <span class="chapter-title">自相关</span>
+  </div>
+
+  <div class="section">
+    <div class="section-title">8.1 自相关的定义与来源</div>
+    <div class="card def">
+      <div class="card-title">定义：自相关</div>
+      <p>违反 A4 中的"无自相关"部分：$\text{Cov}(\varepsilon_i, \varepsilon_j) \neq 0$，$i \neq j$。主要出现在时间序列数据中。</p>
+      <p><span class="hl">AR(1) 扰动项</span>（一阶自回归过程）：</p>
+      <div class="formula-box">$$\varepsilon_t = \rho\,\varepsilon_{t-1} + u_t, \quad u_t \overset{\text{iid}}{\sim}(0, \sigma_u^2), \quad |\rho| < 1$$</div>
+      <p>则 $\text{Var}(\varepsilon_t) = \dfrac{\sigma_u^2}{1-\rho^2}$，$\text{Cov}(\varepsilon_t, \varepsilon_{t-s}) = \dfrac{\rho^s\sigma_u^2}{1-\rho^2}$。</p>
+    </div>
+    <div class="card thm">
+      <div class="card-title">自相关的后果</div>
+      <p>与异方差类似：OLS 无偏，但不是 BLUE，且普通标准误失效。</p>
+      <p>正自相关（$\rho > 0$）时，OLS 标准误<span class="hl-r">被低估</span>（实际 $t$ 统计量偏大），过度拒绝 $H_0$，结论过于"显著"。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">8.2 检验自相关</div>
+    <div class="card thm">
+      <div class="card-title">Durbin-Watson (DW) 检验</div>
+      <p>$H_0: \rho = 0$，统计量：</p>
+      <div class="formula-box">$$DW = \frac{\sum_{t=2}^{n}(\hat{\varepsilon}_t - \hat{\varepsilon}_{t-1})^2}{\sum_{t=1}^{n}\hat{\varepsilon}_t^2} \approx 2(1 - \hat{\rho})$$</div>
+      <p>$DW \approx 2$：无自相关；$DW \approx 0$：强正自相关；$DW \approx 4$：强负自相关。</p>
+      <p>利用 $d_L, d_U$ 临界值判断（存在不确定区间）。</p>
+      <p><span class="hl-r">限制</span>：模型必须含截距；不适用于滞后因变量作为解释变量的模型。</p>
+    </div>
+    <div class="card thm">
+      <div class="card-title">Breusch-Godfrey (BG) 检验</div>
+      <p>将残差 $\hat{\varepsilon}_t$ 对原模型解释变量及 $\hat{\varepsilon}_{t-1}, \ldots, \hat{\varepsilon}_{t-p}$ 回归：</p>
+      <div class="formula-box">$$LM = nR^2 \xrightarrow{d} \chi^2(p)$$</div>
+      <p>可检验高阶自相关，适用于滞后因变量模型。Stata：<code>estat bgodfrey, lags(p)</code></p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">8.3 修正自相关</div>
+    <div class="card thm">
+      <div class="card-title">方法一：Newey-West HAC 标准误</div>
+      <p>异方差-自相关稳健（HAC）标准误，修正协方差矩阵：</p>
+      <div class="formula-box">$$\widehat{\text{Var}}(\hat{\bm{\beta}})_{\text{HAC}} = (\bm{X}'\bm{X})^{-1}\hat{\bm{S}}(\bm{X}'\bm{X})^{-1}$$</div>
+      <p>Stata：<code>regress y x, newey-west</code> 或 <code>newey y x, lag(p)</code></p>
+    </div>
+    <div class="card thm">
+      <div class="card-title">方法二：GLS（广义最小二乘）</div>
+      <p>若 $\varepsilon_t = \rho\varepsilon_{t-1} + u_t$，用 Prais-Winsten 或 Cochrane-Orcutt 变换消除自相关。</p>
+      <p>变换后模型：$(y_t - \rho y_{t-1}) = \beta_1(1-\rho) + \beta_2(x_t - \rho x_{t-1}) + u_t$，对 $u_t$ 做 OLS。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 第九章 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="chapter" id="ch9">
+  <div class="chapter-header">
+    <span class="chapter-num">第九章</span>
+    <span class="chapter-title">内生性与工具变量</span>
+  </div>
+
+  <div class="section">
+    <div class="section-title">9.1 内生性的来源</div>
+    <div class="card def">
+      <div class="card-title">内生性：$\text{Cov}(x_i, \varepsilon_i) \neq 0$</div>
+      <p>三大来源：</p>
+      <ol>
+        <li><span class="hl">遗漏变量偏误</span>：遗漏了与 $x$ 和 $y$ 均相关的变量 $z$。<br>
+          例：研究教育对工资的影响，遗漏"能力"变量。能力影响教育年限（$\text{Cov}(x, z) \neq 0$）且直接影响工资（$z$ 在 $\varepsilon$ 中）。</li>
+        <li><span class="hl">测量误差</span>：解释变量 $x_i^* = x_i + v_i$（含测量误差 $v_i$），实际回归中 $\varepsilon_i$ 包含 $-\beta_2 v_i$，与 $x_i^*$ 相关。导致衰减偏误（attenuation bias）：$|\hat{\beta}_2| < |\beta_2|$。</li>
+        <li><span class="hl">联立性偏误</span>：$y$ 和 $x$ 互为因果（如供求模型中价格和数量同时决定）。</li>
+      </ol>
+    </div>
+    <div class="card thm">
+      <div class="card-title">遗漏变量偏误的量化</div>
+      <p>真实模型：$y = \beta_1 + \beta_2 x + \beta_3 z + u$，但实际回归遗漏 $z$：</p>
+      <div class="formula-box">$$\text{plim}(\hat{\beta}_2^{\text{OLS}}) = \beta_2 + \beta_3 \cdot \frac{\text{Cov}(x, z)}{\text{Var}(x)}$$</div>
+      <p>偏误方向由 $\beta_3 \cdot \text{Cov}(x,z)$ 的符号决定：</p>
+      <table>
+        <tr><th>$\text{Cov}(x,z)$</th><th>$\beta_3 > 0$</th><th>$\beta_3 < 0$</th></tr>
+        <tr><td>正</td><td>向上偏（高估 $\beta_2$）</td><td>向下偏（低估 $|\beta_2|$）</td></tr>
+        <tr><td>负</td><td>向下偏</td><td>向上偏</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">9.2 工具变量估计（IV/2SLS）</div>
+    <div class="card def">
+      <div class="card-title">有效工具变量的两个条件</div>
+      <p>对于内生变量 $x_i$，工具变量 $z_i$ 必须满足：</p>
+      <ol>
+        <li><span class="hl">相关性（Relevance）</span>：$\text{Cov}(z_i, x_i) \neq 0$，工具变量与内生变量相关</li>
+        <li><span class="hl">外生性（Exogeneity）</span>：$\text{Cov}(z_i, \varepsilon_i) = 0$，工具变量与扰动项不相关（只通过 $x$ 影响 $y$）</li>
+      </ol>
+      <p><span class="hl-r">注意</span>：外生性条件无法由数据直接检验（$\varepsilon_i$ 不可观测），需要理论/经济直觉支撑。</p>
+    </div>
+    <div class="card thm">
+      <div class="card-title">IV 估计量</div>
+      <p>恰好识别（一个内生变量，一个工具变量）：</p>
+      <div class="formula-box">$$\hat{\beta}_2^{\text{IV}} = \frac{\text{Cov}(z_i, y_i)}{\text{Cov}(z_i, x_i)} = \frac{\sum(z_i - \bar{z})(y_i - \bar{y})}{\sum(z_i - \bar{z})(x_i - \bar{x})}$$</div>
+      <p>矩阵形式：$\hat{\bm{\beta}}^{\text{IV}} = (\bm{Z}'\bm{X})^{-1}\bm{Z}'\bm{y}$，其中 $\bm{Z}$ 为工具变量矩阵。</p>
+      <div class="formula-box">$$\text{plim}(\hat{\beta}_2^{\text{IV}}) = \beta_2 + \frac{\text{Cov}(z, \varepsilon)}{\text{Cov}(z, x)} = \beta_2 \quad \text{（当 } z \text{ 外生时）}$$</div>
+    </div>
+    <div class="card thm">
+      <div class="card-title">两阶段最小二乘（2SLS）</div>
+      <p>过度识别（工具变量多于内生变量）时使用 2SLS：</p>
+      <div class="steps">
+        <div class="step">第一阶段：将内生变量 $x$ 对所有工具变量 $\bm{Z}$ 回归，得拟合值 $\hat{x}$</div>
+        <div class="step">第二阶段：将 $y$ 对 $\hat{x}$（及其他外生变量）回归，得 $\hat{\beta}^{\text{2SLS}}$</div>
+      </div>
+      <p>第一阶段 $F$ 统计量 $> 10$：工具变量相关性强（弱工具变量的判断标准，陈强推荐 $F > 10$）。</p>
+      <p>Stata：<code>ivregress 2sls y x1 (x2 = z1 z2), first</code></p>
+    </div>
+    <div class="card thm">
+      <div class="card-title">过度识别检验（Sargan-Hansen J 检验）</div>
+      <p>过度识别时，可检验工具变量外生性的一致性（但不能全部证伪）：</p>
+      <div class="formula-box">$$J = n \cdot R^2_{\hat{\varepsilon}^{\text{IV}} \sim \bm{Z}} \xrightarrow{d} \chi^2(L - K)$$</div>
+      <p>$L$ 为工具变量个数，$K$ 为内生变量个数。$p$ 值大 → 不拒绝工具变量外生性。</p>
+      <p>Stata：<code>estat overid</code>（2SLS 后）</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 第十章 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="chapter" id="ch10">
+  <div class="chapter-header">
+    <span class="chapter-num">第十章</span>
+    <span class="chapter-title">模型设定与稳健性</span>
+  </div>
+
+  <div class="section">
+    <div class="section-title">10.1 函数形式设定</div>
+    <div class="card thm">
+      <div class="card-title">Ramsey RESET 检验</div>
+      <p>检验是否存在函数形式错误（遗漏非线性项）：</p>
+      <div class="steps">
+        <div class="step">原模型回归，得拟合值 $\hat{y}$</div>
+        <div class="step">辅助回归：$y$ 对原解释变量加 $\hat{y}^2, \hat{y}^3$ 回归</div>
+        <div class="step">$F$ 检验新加项的联合显著性，$H_0$：函数形式正确</div>
+      </div>
+      <p>Stata：<code>ovtest</code>（回归后）</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">10.2 稳健性检验的体系</div>
+    <div class="card note">
+      <div class="card-title">实证研究中的稳健性检验策略</div>
+      <table>
+        <tr><th>检验类型</th><th>做法</th><th>目的</th></tr>
+        <tr><td>替换核心变量度量方式</td><td>换用不同的代理变量（如用 $\ln$ 形式代替水平值）</td><td>结果对变量构造不敏感</td></tr>
+        <tr><td>替换估计方法</td><td>OLS → Robust OLS → WLS → 分位数回归</td><td>排除方法依赖性</td></tr>
+        <tr><td>改变样本</td><td>剔除异常值（缩尾/截尾）、分子样本检验</td><td>排除极端观测驱动</td></tr>
+        <tr><td>加入控制变量</td><td>逐步加入其他解释变量</td><td>系数稳定性</td></tr>
+        <tr><td>内生性处理</td><td>IV/2SLS、DID、PSM、RDD</td><td>因果识别</td></tr>
+      </table>
+    </div>
+    <div class="card stata">
+      <div class="card-title">常用 Stata 命令速查</div>
+      <pre>* 基础回归
+regress y x1 x2 x3
+regress y x1 x2, robust          // White 稳健标准误
+
+* 诊断检验
+estat hettest                     // BP 异方差检验
+estat imtest, white               // White 检验
+estat bgodfrey, lags(2)          // BG 自相关检验
+vif                               // 方差膨胀因子
+ovtest                            // RESET 函数形式检验
+
+* 缩尾处理（需安装 winsor2）
+winsor2 y x1, cuts(1 99) replace
+
+* 工具变量
+ivregress 2sls y x1 (x2=z1 z2), robust first
+estat overid                      // Sargan-Hansen J 检验
+
+* 模型比较
+estimates store m1
+estimates table m1 m2 m3, stats(N r2 r2_a aic bic) b se star</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">10.3 实证研究的内在逻辑链</div>
+    <div class="card note">
+      <div class="card-title">从理论到结论的完整路径</div>
+      <div class="steps">
+        <div class="step"><span class="hl">理论假说</span>：明确因果机制，变量间的经济逻辑</div>
+        <div class="step"><span class="hl">识别策略</span>：如何将相关关系转化为因果推断？是否存在内生性？</div>
+        <div class="step"><span class="hl">数据与变量</span>：样本选择、代理变量构造、描述性统计</div>
+        <div class="step"><span class="hl">基准回归</span>：建立基线模型，汇报系数与稳健标准误</div>
+        <div class="step"><span class="hl">假设检验</span>：检验异方差、自相关、多重共线性、函数形式</div>
+        <div class="step"><span class="hl">稳健性检验</span>：替换变量、方法、样本，验证核心结论</div>
+        <div class="step"><span class="hl">内生性处理</span>（如需）：IV 估计、DID、PSM、RDD</div>
+        <div class="step"><span class="hl">结论</span>：回到经济理论，解释结果的现实意义与局限性</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end container -->
+
+<div style="text-align:center; padding: 40px; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--border);">
+  计量经济学全书 · 陈强体系 · 大二下 · MathJax 渲染
+</div>
+
+</body>
+</html>
